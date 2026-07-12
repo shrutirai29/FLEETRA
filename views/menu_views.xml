@@ -23,4 +23,12 @@
         sequence="10"
     />
 
+    <menuitem
+    id="menu_fleetra_drivers"
+    name="Drivers"
+    parent="menu_fleetra_operations"
+    action="action_fleetra_driver"
+    sequence="20"
+    />
+
 </odoo>

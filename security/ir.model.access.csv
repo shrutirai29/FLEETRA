@@ -1,2 +1,4 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_fleetra_vehicle_user,fleetra.vehicle.user,model_fleetra_vehicle,base.group_user,1,1,1,1
+
+access_fleetra_driver_user,fleetra.driver.user,model_fleetra_driver,base.group_user,1,1,1,1
