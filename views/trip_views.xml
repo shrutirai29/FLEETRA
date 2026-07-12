@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<odoo>
+
+    <record id="view_fleetra_trip_list" model="ir.ui.view">
+        <field name="name">fleetra.trip.list</field>
+        <field name="model">fleetra.trip</field>
+
+        <field name="arch" type="xml">
+            <list string="Trip Dispatcher"
+                  decoration-info="state == 'dispatched'"
+                  decoration-success="state == 'completed'"
+                  decoration-danger="state == 'cancelled'">
+
+                <field name="name"/>
+                <field name="source"/>
+                <field name="destination"/>
+                <field name="vehicle_id"/>
+                <field name="driver_id"/>
+                <field name="cargo_weight"/>
+                <field name="planned_distance"/>
+
+                <field name="state"
+                       widget="badge"
+                       decoration-info="state == 'dispatched'"
+                       decoration-success="state == 'completed'"
+                       decoration-danger="state == 'cancelled'"/>
+
+            </list>
+        </field>
+    </record>
+
+
+    <record id="view_fleetra_trip_form" model="ir.ui.view">
+        <field name="name">fleetra.trip.form</field>
+        <field name="model">fleetra.trip</field>
+
+        <field name="arch" type="xml">
+
+            <form string="Trip Dispatcher">
+
+                <header>
+
+                    <button name="action_dispatch"
+                            string="Dispatch Trip"
+                            type="object"
+                            class="oe_highlight"
+                            invisible="state != 'draft'"/>
+
+                    <button name="action_complete"
+                            string="Complete Trip"
+                            type="object"
+                            class="oe_highlight"
+                            invisible="state != 'dispatched'"/>
+
+                    <button name="action_cancel"
+                            string="Cancel Trip"
+                            type="object"
+                            invisible="state not in ('draft', 'dispatched')"/>
+
+                    <button name="action_reset_draft"
+                            string="Reset to Draft"
+                            type="object"
+                            invisible="state != 'cancelled'"/>
+
+                    <field name="state"
+                           widget="statusbar"
+                           statusbar_visible="draft,dispatched,completed,cancelled"/>
+
+                </header>
+
+                <sheet>
+
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+
+                    <group>
+
+                        <group string="Route Information">
+
+                            <field name="source"
+                                   readonly="state != 'draft'"/>
+
+                            <field name="destination"
+                                   readonly="state != 'draft'"/>
+
+                            <field name="planned_distance"
+                                   readonly="state != 'draft'"/>
+
+                        </group>
+
+                        <group string="Dispatch Assignment">
+
+                            <field name="vehicle_id"
+                                   readonly="state != 'draft'"/>
+
+                            <field name="driver_id"
+                                   readonly="state != 'draft'"/>
+
+                            <field name="cargo_weight"
+                                   readonly="state != 'draft'"/>
+
+                            <field name="capacity_utilization"
+                                   widget="percentage"
+                                   readonly="1"/>
+
+                        </group>
+
+                    </group>
+
+                    <group string="Trip Completion"
+                           invisible="state not in ('dispatched', 'completed')">
+
+                        <group>
+
+                            <field name="final_odometer"
+                                   readonly="state == 'completed'"/>
+
+                            <field name="fuel_consumed"
+                                   readonly="state == 'completed'"/>
+
+                        </group>
+
+                        <group>
+
+                            <field name="revenue"
+                                   readonly="state == 'completed'"/>
+
+                            <field name="currency_id"
+                                   invisible="1"/>
+
+                        </group>
+
+                    </group>
+
+                </sheet>
+
+            </form>
+
+        </field>
+    </record>
+
+
+    <record id="view_fleetra_trip_search" model="ir.ui.view">
+        <field name="name">fleetra.trip.search</field>
+        <field name="model">fleetra.trip</field>
+
+        <field name="arch" type="xml">
+
+            <search string="Search Trips">
+
+                <field name="name"/>
+                <field name="source"/>
+                <field name="destination"/>
+                <field name="vehicle_id"/>
+                <field name="driver_id"/>
+
+                <filter name="draft"
+                        string="Draft"
+                        domain="[('state', '=', 'draft')]"/>
+
+                <filter name="dispatched"
+                        string="Active Trips"
+                        domain="[('state', '=', 'dispatched')]"/>
+
+                <filter name="completed"
+                        string="Completed"
+                        domain="[('state', '=', 'completed')]"/>
+
+                <group expand="0" string="Group By">
+
+                    <filter name="group_state"
+                            string="Status"
+                            context="{'group_by': 'state'}"/>
+
+                    <filter name="group_vehicle"
+                            string="Vehicle"
+                            context="{'group_by': 'vehicle_id'}"/>
+
+                    <filter name="group_driver"
+                            string="Driver"
+                            context="{'group_by': 'driver_id'}"/>
+
+                </group>
+
+            </search>
+
+        </field>
+    </record>
+
+
+    <record id="action_fleetra_trip" model="ir.actions.act_window">
+
+        <field name="name">Trip Dispatcher</field>
+
+        <field name="res_model">fleetra.trip</field>
+
+        <field name="view_mode">list,form</field>
+
+        <field name="search_view_id"
+               ref="view_fleetra_trip_search"/>
+
+        <field name="help" type="html">
+
+            <p class="o_view_nocontent_smiling_face">
+                Create your first transport trip
+            </p>
+
+            <p>
+                Assign available vehicles and drivers,
+                validate cargo capacity and dispatch trips.
+            </p>
+
+        </field>
+
+    </record>
+
+</odoo>

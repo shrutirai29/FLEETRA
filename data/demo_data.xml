@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<odoo>
+
+    <record id="seq_fleetra_trip" model="ir.sequence">
+        <field name="name">Fleetra Trip Sequence</field>
+        <field name="code">fleetra.trip</field>
+        <field name="prefix">TRP-</field>
+        <field name="padding">4</field>
+    </record>
+
+</odoo>

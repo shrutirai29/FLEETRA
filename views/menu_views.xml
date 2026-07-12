@@ -31,4 +31,12 @@
     sequence="20"
     />
 
+    <menuitem
+    id="menu_fleetra_trips"
+    name="Trip Dispatcher"
+    parent="menu_fleetra_operations"
+    action="action_fleetra_trip"
+    sequence="30"
+    />
+
 </odoo>
