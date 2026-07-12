@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<odoo>
+
+    <!-- Vehicle List View -->
+
+    <record id="view_fleetra_vehicle_list" model="ir.ui.view">
+        <field name="name">fleetra.vehicle.list</field>
+        <field name="model">fleetra.vehicle</field>
+
+        <field name="arch" type="xml">
+
+            <list string="Vehicle Registry"
+                  decoration-success="status == 'available'"
+                  decoration-info="status == 'on_trip'"
+                  decoration-warning="status == 'in_shop'"
+                  decoration-muted="status == 'retired'">
+
+                <field name="registration_number"/>
+                <field name="name"/>
+                <field name="vehicle_type"/>
+                <field name="max_load_capacity"/>
+                <field name="odometer"/>
+                <field name="region"/>
+
+                <field name="status"
+                       widget="badge"
+                       decoration-success="status == 'available'"
+                       decoration-info="status == 'on_trip'"
+                       decoration-warning="status == 'in_shop'"
+                       decoration-danger="status == 'retired'"/>
+
+            </list>
+
+        </field>
+    </record>
+
+
+    <!-- Vehicle Form View -->
+
+    <record id="view_fleetra_vehicle_form" model="ir.ui.view">
+
+        <field name="name">fleetra.vehicle.form</field>
+
+        <field name="model">fleetra.vehicle</field>
+
+        <field name="arch" type="xml">
+
+            <form string="Vehicle">
+
+                <sheet>
+
+                    <div class="oe_title">
+
+                        <label for="name"/>
+
+                        <h1>
+                            <field name="name"
+                                   placeholder="e.g. Van-05"/>
+                        </h1>
+
+                        <field name="registration_number"
+                               placeholder="e.g. GJ01AB1234"/>
+
+                    </div>
+
+                    <group>
+
+                        <group string="Vehicle Information">
+
+                            <field name="vehicle_type"/>
+
+                            <field name="max_load_capacity"/>
+
+                            <field name="odometer"/>
+
+                            <field name="region"/>
+
+                        </group>
+
+                        <group string="Fleet Information">
+
+                            <field name="status"
+                                   widget="badge"/>
+
+                            <field name="acquisition_cost"/>
+
+                            <field name="currency_id"
+                                   invisible="1"/>
+
+                            <field name="active"/>
+
+                        </group>
+
+                    </group>
+
+                </sheet>
+
+            </form>
+
+        </field>
+
+    </record>
+
+
+    <!-- Vehicle Search View -->
+
+    <record id="view_fleetra_vehicle_search" model="ir.ui.view">
+
+        <field name="name">fleetra.vehicle.search</field>
+
+        <field name="model">fleetra.vehicle</field>
+
+        <field name="arch" type="xml">
+
+            <search string="Search Vehicles">
+
+                <field name="registration_number"/>
+
+                <field name="name"/>
+
+                <field name="region"/>
+
+                <separator/>
+
+                <filter name="available"
+                        string="Available"
+                        domain="[('status', '=', 'available')]"/>
+
+                <filter name="on_trip"
+                        string="On Trip"
+                        domain="[('status', '=', 'on_trip')]"/>
+
+                <filter name="in_shop"
+                        string="In Shop"
+                        domain="[('status', '=', 'in_shop')]"/>
+
+                <filter name="retired"
+                        string="Retired"
+                        domain="[('status', '=', 'retired')]"/>
+
+                <group expand="0" string="Group By">
+
+                    <filter name="group_vehicle_type"
+                            string="Vehicle Type"
+                            context="{'group_by': 'vehicle_type'}"/>
+
+                    <filter name="group_status"
+                            string="Status"
+                            context="{'group_by': 'status'}"/>
+
+                    <filter name="group_region"
+                            string="Region"
+                            context="{'group_by': 'region'}"/>
+
+                </group>
+
+            </search>
+
+        </field>
+
+    </record>
+
+
+    <!-- Vehicle Window Action -->
+
+    <record id="action_fleetra_vehicle" model="ir.actions.act_window">
+
+        <field name="name">Vehicles</field>
+
+        <field name="res_model">fleetra.vehicle</field>
+
+        <field name="view_mode">list,form</field>
+
+        <field name="search_view_id"
+               ref="view_fleetra_vehicle_search"/>
+
+        <field name="help" type="html">
+
+            <p class="o_view_nocontent_smiling_face">
+                Register your first fleet vehicle
+            </p>
+
+            <p>
+                Manage vehicles, capacity, odometer and fleet availability.
+            </p>
+
+        </field>
+
+    </record>
+
+</odoo>
