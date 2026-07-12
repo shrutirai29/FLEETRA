@@ -11,14 +11,15 @@
         "web",
     ],
 
-    "data": [
-        "security/ir.model.access.csv",
-        "data/demo_data.xml",
-        "views/vehicle_views.xml",
-        "views/driver_views.xml",
-        "views/trip_views.xml",
-        "views/menu_views.xml",
-    ],
+"data": [
+    "security/ir.model.access.csv",
+    "data/demo_data.xml",
+    "views/vehicle_views.xml",
+    "views/driver_views.xml",
+    "views/trip_views.xml",
+    "views/maintenance_views.xml",
+    "views/menu_views.xml",
+],
 
     "application": True,
     "installable": True,

@@ -6,3 +6,6 @@ access_fleetra_driver_user,fleetra.driver.user,model_fleetra_driver,base.group_u
 access_fleetra_trip_user,fleetra.trip.user,model_fleetra_trip,base.group_user,1,1,1,1
 
 access_fleetra_maintenance_user,fleetra.maintenance.user,model_fleetra_maintenance,base.group_user,1,1,1,1
+
+access_fleetra_fuel_log_user,fleetra.fuel.log.user,model_fleetra_fuel_log,base.group_user,1,1,1,1
+access_fleetra_expense_user,fleetra.expense.user,model_fleetra_expense,base.group_user,1,1,1,1

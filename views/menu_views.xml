@@ -47,4 +47,27 @@
     sequence="40"
     />
 
+    <menuitem
+    id="menu_fleetra_finance"
+    name="Fuel &amp; Expenses"
+    parent="menu_fleetra_root"
+    sequence="20"
+/>
+
+<menuitem
+    id="menu_fleetra_fuel_logs"
+    name="Fuel Logs"
+    parent="menu_fleetra_finance"
+    action="action_fleetra_fuel_log"
+    sequence="10"
+/>
+
+<menuitem
+    id="menu_fleetra_expenses"
+    name="Expenses"
+    parent="menu_fleetra_finance"
+    action="action_fleetra_expense"
+    sequence="20"
+/>
+
 </odoo>
