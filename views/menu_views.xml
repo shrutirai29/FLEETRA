@@ -39,4 +39,12 @@
     sequence="30"
     />
 
+    <menuitem
+    id="menu_fleetra_maintenance"
+    name="Maintenance"
+    parent="menu_fleetra_operations"
+    action="action_fleetra_maintenance"
+    sequence="40"
+    />
+
 </odoo>

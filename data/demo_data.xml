@@ -8,5 +8,10 @@
         <field name="prefix">TRP-</field>
         <field name="padding">4</field>
     </record>
-
+    <record id="seq_fleetra_maintenance" model="ir.sequence">
+        <field name="name">Fleetra Maintenance Sequence</field>
+        <field name="code">fleetra.maintenance</field>
+        <field name="prefix">MNT-</field>
+        <field name="padding">4</field>
+    </record>
 </odoo>

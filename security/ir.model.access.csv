@@ -4,3 +4,5 @@ access_fleetra_vehicle_user,fleetra.vehicle.user,model_fleetra_vehicle,base.grou
 access_fleetra_driver_user,fleetra.driver.user,model_fleetra_driver,base.group_user,1,1,1,1
 
 access_fleetra_trip_user,fleetra.trip.user,model_fleetra_trip,base.group_user,1,1,1,1
+
+access_fleetra_maintenance_user,fleetra.maintenance.user,model_fleetra_maintenance,base.group_user,1,1,1,1
