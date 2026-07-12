@@ -8,55 +8,76 @@ class FleetraExpense(models.Model):
     _order = "date desc, id desc"
 
     name = fields.Char(
-        string="Description",
-        required=True
+        string="Expense Description",
+        required=True,
     )
 
     vehicle_id = fields.Many2one(
         "fleetra.vehicle",
         string="Vehicle",
-        required=True
+        required=True,
     )
 
     trip_id = fields.Many2one(
         "fleetra.trip",
-        string="Trip"
+        string="Trip",
     )
 
     expense_type = fields.Selection(
         [
             ("toll", "Toll"),
             ("parking", "Parking"),
-            ("repair", "Repair"),
+            ("driver_allowance", "Driver Allowance"),
             ("insurance", "Insurance"),
+            ("fine", "Fine / Penalty"),
+            ("permit", "Permit / Registration"),
             ("other", "Other"),
         ],
         string="Expense Type",
-        required=True
+        required=True,
     )
 
     amount = fields.Monetary(
         string="Amount",
-        required=True
+        currency_field="currency_id",
+        required=True,
     )
 
     date = fields.Date(
-        string="Date",
+        string="Expense Date",
         default=fields.Date.context_today,
-        required=True
+        required=True,
     )
 
     currency_id = fields.Many2one(
         "res.currency",
-        default=lambda self: self.env.company.currency_id
+        string="Currency",
+        default=lambda self: self.env.company.currency_id,
     )
+
+    # ---------------------------------------------------------
+    # ONCHANGE
+    # ---------------------------------------------------------
+
+    @api.onchange("vehicle_id")
+    def _onchange_vehicle_id(self):
+        for expense in self:
+            if (
+                expense.trip_id
+                and expense.trip_id.vehicle_id != expense.vehicle_id
+            ):
+                expense.trip_id = False
+
+    # ---------------------------------------------------------
+    # CONSTRAINTS
+    # ---------------------------------------------------------
 
     @api.constrains("amount")
     def _check_amount(self):
         for expense in self:
-            if expense.amount < 0:
+            if expense.amount <= 0:
                 raise ValidationError(
-                    "Expense amount cannot be negative."
+                    "Expense amount must be greater than zero."
                 )
 
     @api.constrains("vehicle_id", "trip_id")
@@ -67,5 +88,6 @@ class FleetraExpense(models.Model):
                 and expense.trip_id.vehicle_id != expense.vehicle_id
             ):
                 raise ValidationError(
-                    "Selected trip does not belong to the selected vehicle."
+                    "The selected trip does not belong to "
+                    "the selected vehicle."
                 )

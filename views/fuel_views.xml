@@ -2,27 +2,35 @@
 
 <odoo>
 
+    <!-- FUEL LOG LIST VIEW -->
+
     <record id="view_fleetra_fuel_log_list" model="ir.ui.view">
         <field name="name">fleetra.fuel.log.list</field>
         <field name="model">fleetra.fuel.log</field>
 
         <field name="arch" type="xml">
             <list string="Fuel Logs">
+
                 <field name="date"/>
                 <field name="vehicle_id"/>
                 <field name="trip_id"/>
                 <field name="liters"/>
                 <field name="cost"/>
                 <field name="fuel_efficiency"/>
+
             </list>
         </field>
     </record>
+
+
+    <!-- FUEL LOG FORM VIEW -->
 
     <record id="view_fleetra_fuel_log_form" model="ir.ui.view">
         <field name="name">fleetra.fuel.log.form</field>
         <field name="model">fleetra.fuel.log</field>
 
         <field name="arch" type="xml">
+
             <form string="Fuel Log">
 
                 <sheet>
@@ -32,15 +40,20 @@
                         <group string="Fuel Details">
 
                             <field name="vehicle_id"/>
+
                             <field name="trip_id"/>
+
                             <field name="liters"/>
+
                             <field name="date"/>
 
                         </group>
 
-                        <group string="Cost & Efficiency">
+
+                        <group string="Cost and Efficiency">
 
                             <field name="cost"/>
+
                             <field name="currency_id"
                                    invisible="1"/>
 
@@ -54,15 +67,72 @@
                 </sheet>
 
             </form>
+
         </field>
     </record>
+
+
+    <!-- FUEL LOG SEARCH VIEW -->
+
+    <record id="view_fleetra_fuel_log_search" model="ir.ui.view">
+        <field name="name">fleetra.fuel.log.search</field>
+        <field name="model">fleetra.fuel.log</field>
+
+        <field name="arch" type="xml">
+
+            <search>
+
+                <field name="vehicle_id"/>
+
+                <field name="trip_id"/>
+
+                <field name="date"/>
+
+                <separator/>
+
+                <filter name="group_vehicle"
+                        string="Vehicle"
+                        context="{'group_by': 'vehicle_id'}"/>
+
+                <filter name="group_trip"
+                        string="Trip"
+                        context="{'group_by': 'trip_id'}"/>
+
+                <filter name="group_date"
+                        string="Date"
+                        context="{'group_by': 'date'}"/>
+
+            </search>
+
+        </field>
+    </record>
+
+
+    <!-- FUEL LOG WINDOW ACTION -->
 
     <record id="action_fleetra_fuel_log"
             model="ir.actions.act_window">
 
         <field name="name">Fuel Logs</field>
+
         <field name="res_model">fleetra.fuel.log</field>
+
         <field name="view_mode">list,form</field>
+
+        <field name="search_view_id"
+               ref="view_fleetra_fuel_log_search"/>
+
+        <field name="help" type="html">
+
+            <p class="o_view_nocontent_smiling_face">
+                Record your first fuel entry
+            </p>
+
+            <p>
+                Track fuel consumption, cost and vehicle efficiency.
+            </p>
+
+        </field>
 
     </record>
 

@@ -2,6 +2,8 @@
 
 <odoo>
 
+    <!-- DRIVER LIST VIEW -->
+
     <record id="view_fleetra_driver_list" model="ir.ui.view">
         <field name="name">fleetra.driver.list</field>
         <field name="model">fleetra.driver</field>
@@ -34,6 +36,8 @@
     </record>
 
 
+    <!-- DRIVER FORM VIEW -->
+
     <record id="view_fleetra_driver_form" model="ir.ui.view">
         <field name="name">fleetra.driver.form</field>
         <field name="model">fleetra.driver</field>
@@ -45,12 +49,14 @@
                 <sheet>
 
                     <div class="oe_title">
+
                         <label for="name"/>
 
                         <h1>
                             <field name="name"
                                    placeholder="Driver Name"/>
                         </h1>
+
                     </div>
 
                     <group>
@@ -67,7 +73,7 @@
 
                         </group>
 
-                        <group string="Safety & Availability">
+                        <group string="Safety and Availability">
 
                             <field name="license_status"
                                    widget="badge"/>
@@ -89,16 +95,23 @@
     </record>
 
 
+    <!-- DRIVER SEARCH VIEW -->
+
     <record id="view_fleetra_driver_search" model="ir.ui.view">
+
         <field name="name">fleetra.driver.search</field>
+
         <field name="model">fleetra.driver</field>
 
         <field name="arch" type="xml">
 
-            <search string="Search Drivers">
+            <search>
 
                 <field name="name"/>
+
                 <field name="license_number"/>
+
+                <separator/>
 
                 <filter name="available"
                         string="Available"
@@ -112,36 +125,33 @@
                         string="Expired License"
                         domain="[('license_status', '=', 'expired')]"/>
 
-                <group expand="0" string="Group By">
+                <separator/>
 
-                    <filter name="group_status"
-                            string="Status"
-                            context="{'group_by': 'status'}"/>
+                <filter name="group_status"
+                        string="Status"
+                        context="{'group_by': 'status'}"/>
 
-                    <filter name="group_license_category"
-                            string="License Category"
-                            context="{'group_by': 'license_category'}"/>
-
-                </group>
+                <filter name="group_license_category"
+                        string="License Category"
+                        context="{'group_by': 'license_category'}"/>
 
             </search>
 
         </field>
+
     </record>
 
+
+    <!-- DRIVER WINDOW ACTION -->
 
     <record id="action_fleetra_driver"
             model="ir.actions.act_window">
 
         <field name="name">Drivers</field>
 
-        <field name="res_model">
-            fleetra.driver
-        </field>
+        <field name="res_model">fleetra.driver</field>
 
-        <field name="view_mode">
-            list,form
-        </field>
+        <field name="view_mode">list,form</field>
 
         <field name="search_view_id"
                ref="view_fleetra_driver_search"/>

@@ -2,7 +2,12 @@
 
 <odoo>
 
+    <!-- ===================================================== -->
+    <!-- EXPENSE LIST VIEW -->
+    <!-- ===================================================== -->
+
     <record id="view_fleetra_expense_list" model="ir.ui.view">
+
         <field name="name">fleetra.expense.list</field>
         <field name="model">fleetra.expense</field>
 
@@ -11,19 +16,32 @@
             <list string="Operational Expenses">
 
                 <field name="date"/>
+
                 <field name="name"/>
+
                 <field name="vehicle_id"/>
+
                 <field name="trip_id"/>
-                <field name="expense_type"/>
-                <field name="amount"/>
+
+                <field name="expense_type"
+                       widget="badge"/>
+
+                <field name="amount"
+                       sum="Total Expenses"/>
 
             </list>
 
         </field>
+
     </record>
 
 
+    <!-- ===================================================== -->
+    <!-- EXPENSE FORM VIEW -->
+    <!-- ===================================================== -->
+
     <record id="view_fleetra_expense_form" model="ir.ui.view">
+
         <field name="name">fleetra.expense.form</field>
         <field name="model">fleetra.expense</field>
 
@@ -33,30 +51,53 @@
 
                 <sheet>
 
+                    <!-- TITLE -->
+
                     <div class="oe_title">
+
+                        <label for="name"/>
 
                         <h1>
                             <field name="name"
-                                   placeholder="Expense Description"/>
+                                   placeholder="e.g. Highway Toll"/>
                         </h1>
 
                     </div>
 
+
+                    <!-- EXPENSE INFORMATION -->
+
                     <group>
 
-                        <group>
+                        <group string="Expense Details">
 
-                            <field name="vehicle_id"/>
-                            <field name="trip_id"/>
+                            <field name="vehicle_id"
+                                   options="{
+                                       'no_create': True,
+                                       'no_create_edit': True
+                                   }"/>
+
+                            <field name="trip_id"
+                                   domain="[
+                                       ('vehicle_id', '=', vehicle_id)
+                                   ]"
+                                   options="{
+                                       'no_create': True,
+                                       'no_create_edit': True
+                                   }"/>
+
                             <field name="expense_type"/>
 
                         </group>
 
-                        <group>
+
+                        <group string="Payment Information">
 
                             <field name="amount"/>
+
                             <field name="currency_id"
                                    invisible="1"/>
+
                             <field name="date"/>
 
                         </group>
@@ -68,15 +109,116 @@
             </form>
 
         </field>
+
     </record>
 
+
+    <!-- ===================================================== -->
+    <!-- EXPENSE SEARCH VIEW -->
+    <!-- ===================================================== -->
+
+    <record id="view_fleetra_expense_search"
+            model="ir.ui.view">
+
+        <field name="name">
+            fleetra.expense.search
+        </field>
+
+        <field name="model">
+            fleetra.expense
+        </field>
+
+        <field name="arch" type="xml">
+
+            <search>
+
+                <field name="name"/>
+
+                <field name="vehicle_id"/>
+
+                <field name="trip_id"/>
+
+                <field name="expense_type"/>
+
+                <separator/>
+
+                <filter name="toll"
+                        string="Toll"
+                        domain="[('expense_type', '=', 'toll')]"/>
+
+                <filter name="parking"
+                        string="Parking"
+                        domain="[('expense_type', '=', 'parking')]"/>
+
+                <filter name="driver_allowance"
+                        string="Driver Allowance"
+                        domain="[('expense_type', '=', 'driver_allowance')]"/>
+
+                <filter name="insurance"
+                        string="Insurance"
+                        domain="[('expense_type', '=', 'insurance')]"/>
+
+                <filter name="fine"
+                        string="Fine / Penalty"
+                        domain="[('expense_type', '=', 'fine')]"/>
+
+                <separator/>
+
+                <filter name="group_expense_type"
+                        string="Expense Type"
+                        context="{'group_by': 'expense_type'}"/>
+
+                <filter name="group_vehicle"
+                        string="Vehicle"
+                        context="{'group_by': 'vehicle_id'}"/>
+
+                <filter name="group_trip"
+                        string="Trip"
+                        context="{'group_by': 'trip_id'}"/>
+
+                <filter name="group_date"
+                        string="Date"
+                        context="{'group_by': 'date'}"/>
+
+            </search>
+
+        </field>
+
+    </record>
+
+
+    <!-- ===================================================== -->
+    <!-- EXPENSE WINDOW ACTION -->
+    <!-- ===================================================== -->
 
     <record id="action_fleetra_expense"
             model="ir.actions.act_window">
 
         <field name="name">Expenses</field>
-        <field name="res_model">fleetra.expense</field>
-        <field name="view_mode">list,form</field>
+
+        <field name="res_model">
+            fleetra.expense
+        </field>
+
+        <field name="view_mode">
+            list,form
+        </field>
+
+        <field name="search_view_id"
+               ref="view_fleetra_expense_search"/>
+
+        <field name="help" type="html">
+
+            <p class="o_view_nocontent_smiling_face">
+                Record your first operational expense
+            </p>
+
+            <p>
+                Track tolls, parking, driver allowances,
+                insurance and other fleet expenses.
+            </p>
+
+        </field>
 
     </record>
 

@@ -2,15 +2,9 @@
 
 <odoo>
 
-    <record id="action_fleetra_dashboard"
-            model="ir.actions.client">
-
-        <field name="name">Dashboard</field>
-
-        <field name="tag">
-            fleetra_dashboard
-        </field>
-
+    <record id="action_fleetra_dashboard" model="ir.actions.client">
+        <field name="name">Fleetra Dashboard</field>
+        <field name="tag">fleetra_dashboard</field>
     </record>
 
 </odoo>

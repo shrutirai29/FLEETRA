@@ -2,11 +2,16 @@
 
 <odoo>
 
+    <!-- ===================================================== -->
+    <!-- TRIP LIST VIEW -->
+    <!-- ===================================================== -->
+
     <record id="view_fleetra_trip_list" model="ir.ui.view">
         <field name="name">fleetra.trip.list</field>
         <field name="model">fleetra.trip</field>
 
         <field name="arch" type="xml">
+
             <list string="Trip Dispatcher"
                   decoration-info="state == 'dispatched'"
                   decoration-success="state == 'completed'"
@@ -15,10 +20,13 @@
                 <field name="name"/>
                 <field name="source"/>
                 <field name="destination"/>
+                <field name="cargo_weight"/>
                 <field name="vehicle_id"/>
                 <field name="driver_id"/>
-                <field name="cargo_weight"/>
                 <field name="planned_distance"/>
+
+                <field name="capacity_utilization"
+                       widget="percentage"/>
 
                 <field name="state"
                        widget="badge"
@@ -27,9 +35,14 @@
                        decoration-danger="state == 'cancelled'"/>
 
             </list>
+
         </field>
     </record>
 
+
+    <!-- ===================================================== -->
+    <!-- TRIP FORM VIEW -->
+    <!-- ===================================================== -->
 
     <record id="view_fleetra_trip_form" model="ir.ui.view">
         <field name="name">fleetra.trip.form</field>
@@ -38,6 +51,8 @@
         <field name="arch" type="xml">
 
             <form string="Trip Dispatcher">
+
+                <!-- HEADER -->
 
                 <header>
 
@@ -69,39 +84,79 @@
 
                 </header>
 
+
+                <!-- FORM BODY -->
+
                 <sheet>
 
+                    <!-- TITLE -->
+
                     <div class="oe_title">
+
+                        <label for="name"/>
+
                         <h1>
-                            <field name="name"/>
+                            <field name="name"
+                                   readonly="state != 'draft'"
+                                   placeholder="Trip Reference"/>
                         </h1>
+
                     </div>
 
+
+                    <!-- ================================================= -->
+                    <!-- MAIN TRIP INFORMATION -->
+                    <!-- ================================================= -->
+
                     <group>
+
+                        <!-- ROUTE INFORMATION -->
 
                         <group string="Route Information">
 
                             <field name="source"
-                                   readonly="state != 'draft'"/>
+                                   readonly="state != 'draft'"
+                                   placeholder="Enter source location"/>
 
                             <field name="destination"
-                                   readonly="state != 'draft'"/>
+                                   readonly="state != 'draft'"
+                                   placeholder="Enter destination location"/>
 
                             <field name="planned_distance"
-                                   readonly="state != 'draft'"/>
+                                   readonly="state != 'draft'"
+                                   placeholder="Distance in KM"/>
 
                         </group>
 
+
+                        <!-- DISPATCH ASSIGNMENT -->
+
                         <group string="Dispatch Assignment">
 
+                            <field name="cargo_weight"
+                                   readonly="state != 'draft'"
+                                   placeholder="Enter cargo weight first"/>
+
                             <field name="vehicle_id"
-                                   readonly="state != 'draft'"/>
+                                   readonly="state != 'draft'"
+                                   domain="[
+                                       ('status', '=', 'available'),
+                                       ('max_load_capacity', '>=', cargo_weight)
+                                   ]"
+                                   options="{
+                                       'no_create': True,
+                                       'no_create_edit': True
+                                   }"/>
 
                             <field name="driver_id"
-                                   readonly="state != 'draft'"/>
-
-                            <field name="cargo_weight"
-                                   readonly="state != 'draft'"/>
+                                   readonly="state != 'draft'"
+                                   domain="[
+                                       ('status', '=', 'available')
+                                   ]"
+                                   options="{
+                                       'no_create': True,
+                                       'no_create_edit': True
+                                   }"/>
 
                             <field name="capacity_utilization"
                                    widget="percentage"
@@ -111,23 +166,60 @@
 
                     </group>
 
-                    <group string="Trip Completion"
-                           invisible="state not in ('dispatched', 'completed')">
+
+                    <!-- ================================================= -->
+                    <!-- ODOMETER INFORMATION -->
+                    <!-- ================================================= -->
+
+                    <group string="Odometer Information"
+                           invisible="state == 'draft'">
 
                         <group>
 
-                            <field name="final_odometer"
-                                   readonly="state == 'completed'"/>
+                            <field name="current_odometer"
+                                   readonly="1"/>
 
-                            <field name="fuel_consumed"
-                                   readonly="state == 'completed'"/>
+                            <field name="expected_final_odometer"
+                                   readonly="1"/>
 
                         </group>
 
                         <group>
 
+                            <field name="final_odometer"
+                                   readonly="state == 'completed'"
+                                   placeholder="Enter final odometer"/>
+
+                        </group>
+
+                    </group>
+
+
+                    <!-- ================================================= -->
+                    <!-- TRIP COMPLETION -->
+                    <!-- ================================================= -->
+
+                    <group string="Trip Completion"
+                           invisible="state not in ('dispatched', 'completed')">
+
+                        <group>
+
+                            <field name="fuel_consumed"
+                                   readonly="state == 'completed'"
+                                   placeholder="Fuel consumed in litres"/>
+
+                            <field name="fuel_cost"
+                                   readonly="state == 'completed'"
+                                   placeholder="Enter total fuel cost"/>
+
+                        </group>
+
+
+                        <group>
+
                             <field name="revenue"
-                                   readonly="state == 'completed'"/>
+                                   readonly="state == 'completed'"
+                                   placeholder="Trip revenue"/>
 
                             <field name="currency_id"
                                    invisible="1"/>
@@ -144,19 +236,27 @@
     </record>
 
 
+    <!-- ===================================================== -->
+    <!-- TRIP SEARCH VIEW -->
+    <!-- ===================================================== -->
+
     <record id="view_fleetra_trip_search" model="ir.ui.view">
         <field name="name">fleetra.trip.search</field>
         <field name="model">fleetra.trip</field>
 
         <field name="arch" type="xml">
 
-            <search string="Search Trips">
+            <search>
 
                 <field name="name"/>
                 <field name="source"/>
                 <field name="destination"/>
                 <field name="vehicle_id"/>
                 <field name="driver_id"/>
+
+                <separator/>
+
+                <!-- STATUS FILTERS -->
 
                 <filter name="draft"
                         string="Draft"
@@ -170,21 +270,25 @@
                         string="Completed"
                         domain="[('state', '=', 'completed')]"/>
 
-                <group expand="0" string="Group By">
+                <filter name="cancelled"
+                        string="Cancelled"
+                        domain="[('state', '=', 'cancelled')]"/>
 
-                    <filter name="group_state"
-                            string="Status"
-                            context="{'group_by': 'state'}"/>
+                <separator/>
 
-                    <filter name="group_vehicle"
-                            string="Vehicle"
-                            context="{'group_by': 'vehicle_id'}"/>
+                <!-- GROUP BY -->
 
-                    <filter name="group_driver"
-                            string="Driver"
-                            context="{'group_by': 'driver_id'}"/>
+                <filter name="group_state"
+                        string="Status"
+                        context="{'group_by': 'state'}"/>
 
-                </group>
+                <filter name="group_vehicle"
+                        string="Vehicle"
+                        context="{'group_by': 'vehicle_id'}"/>
+
+                <filter name="group_driver"
+                        string="Driver"
+                        context="{'group_by': 'driver_id'}"/>
 
             </search>
 
@@ -192,7 +296,12 @@
     </record>
 
 
-    <record id="action_fleetra_trip" model="ir.actions.act_window">
+    <!-- ===================================================== -->
+    <!-- TRIP WINDOW ACTION -->
+    <!-- ===================================================== -->
+
+    <record id="action_fleetra_trip"
+            model="ir.actions.act_window">
 
         <field name="name">Trip Dispatcher</field>
 
@@ -210,8 +319,8 @@
             </p>
 
             <p>
-                Assign available vehicles and drivers,
-                validate cargo capacity and dispatch trips.
+                Enter cargo weight, select a suitable vehicle
+                and assign an available driver.
             </p>
 
         </field>
