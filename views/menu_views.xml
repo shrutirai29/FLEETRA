@@ -70,4 +70,12 @@
     sequence="20"
 />
 
+<menuitem
+    id="menu_fleetra_dashboard"
+    name="Dashboard"
+    parent="menu_fleetra_root"
+    action="action_fleetra_dashboard"
+    sequence="1"
+/>
+
 </odoo>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<odoo>
+
+    <record id="action_fleetra_dashboard"
+            model="ir.actions.client">
+
+        <field name="name">Dashboard</field>
+
+        <field name="tag">
+            fleetra_dashboard
+        </field>
+
+    </record>
+
+</odoo>

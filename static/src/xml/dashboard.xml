@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<templates xml:space="preserve">
+
+    <t t-name="fleetra.FleetraDashboard">
+
+        <div class="fleetra_dashboard">
+
+            <div class="fleetra_dashboard_header">
+
+                <div>
+                    <h1>Fleet Command Center</h1>
+                    <p>
+                        Real-time overview of your transport operations.
+                    </p>
+                </div>
+
+                <button
+                    class="fleetra_refresh"
+                    t-on-click="loadDashboard">
+
+                    ↻ Refresh
+
+                </button>
+
+            </div>
+
+            <t t-if="state.loading">
+
+                <div class="fleetra_loading">
+                    Loading fleet intelligence...
+                </div>
+
+            </t>
+
+            <t t-else="">
+
+                <div class="fleetra_kpi_grid">
+
+                    <div class="fleetra_kpi_card">
+                        <span>ACTIVE VEHICLES</span>
+                        <h2 t-esc="state.data.active_vehicles"/>
+                        <p>Operational fleet</p>
+                    </div>
+
+                    <div class="fleetra_kpi_card">
+                        <span>AVAILABLE</span>
+                        <h2 t-esc="state.data.available_vehicles"/>
+                        <p>Ready for dispatch</p>
+                    </div>
+
+                    <div class="fleetra_kpi_card">
+                        <span>IN MAINTENANCE</span>
+                        <h2 t-esc="state.data.maintenance_vehicles"/>
+                        <p>Currently in shop</p>
+                    </div>
+
+                    <div class="fleetra_kpi_card">
+                        <span>ACTIVE TRIPS</span>
+                        <h2 t-esc="state.data.active_trips"/>
+                        <p>Currently dispatched</p>
+                    </div>
+
+                    <div class="fleetra_kpi_card">
+                        <span>PENDING TRIPS</span>
+                        <h2 t-esc="state.data.pending_trips"/>
+                        <p>Awaiting dispatch</p>
+                    </div>
+
+                    <div class="fleetra_kpi_card">
+                        <span>DRIVERS ON DUTY</span>
+                        <h2 t-esc="state.data.drivers_on_duty"/>
+                        <p>Operational drivers</p>
+                    </div>
+
+                </div>
+
+                <div class="fleetra_dashboard_bottom">
+
+                    <div class="fleetra_utilization_card">
+
+                        <span>FLEET UTILIZATION</span>
+
+                        <h2>
+                            <t t-esc="state.data.fleet_utilization"/>%
+                        </h2>
+
+                        <div class="fleetra_progress">
+
+                            <div
+                                class="fleetra_progress_value"
+                                t-att-style="'width: ' + state.data.fleet_utilization + '%'">
+                            </div>
+
+                        </div>
+
+                        <p>
+                            Percentage of active fleet currently on trips.
+                        </p>
+
+                    </div>
+
+                    <div class="fleetra_cost_card">
+
+                        <span>OPERATIONAL COST</span>
+
+                        <h2>
+                            ₹
+                            <t t-esc="state.data.operational_cost"/>
+                        </h2>
+
+                        <p>
+                            Fuel + maintenance + operational expenses
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </t>
+
+        </div>
+
+    </t>
+
+</templates>
